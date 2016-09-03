@@ -6,12 +6,20 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import se.drathier.tagbox.tagbox.Model;
+import se.drathier.tagbox.tagbox.mifare.mifare_ultralight;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,6 +32,8 @@ import se.drathier.tagbox.common.SnomedDB;
 import se.drathier.tagbox.tagbox.Model;
 
 public class MainActivity extends AppCompatActivity {
+
+    public Model m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         model.bt_plus = Model.BloodTypePlusMinus.Plus;
         model.is_organ_donor = false;
         model.is_male = true;
+        this.m = model;
 
         Model.Snomed_id snomed_id = new Model.Snomed_id();
         snomed_id.id = 91934008;
@@ -86,15 +97,27 @@ public class MainActivity extends AppCompatActivity {
             Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             MifareUltralight a = MifareUltralight.get(tagFromIntent);
+            mifare_ultralight mul = new mifare_ultralight(a);
             Log.d("tag_tech", tagFromIntent.toString());
+
+            Parcel p = Parcel.obtain();
+            this.m.writeToParcel(p, 0);
+            try {
+                mul.mul.connect();
+                mul.writeParcel(p);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    mul.mul.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             try {
                 a.connect();
-                Log.d("raw_json", gson.toJson(a.readPages(0)));
-                Log.d("raw_json", gson.toJson(a.readPages(1)));
-                Log.d("raw_json", gson.toJson(a.readPages(2)));
-                Log.d("raw_json", gson.toJson(a.readPages(4)));
-                Log.d("raw_json", gson.toJson(a.readPages(64)));
+                Log.d("raw_json", gson.toJson(mul.read_all()));
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -104,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
-
+            p.recycle();
         }
         //process the msgs array
 
@@ -113,17 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public byte[] read_all(MifareUltralight mul) throws IOException {
-        /*
-        ArrayList<Byte> out = new ArrayList<Byte>();
-        int max = 0xDE;
-        for (int i = 0; i < max; i+=4) {
-            out.addAll(mul.readPages(i));
-        }
-        //mul.readPages();
-        */
-        return null;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
