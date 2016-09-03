@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -57,49 +58,15 @@ public class Model implements Parcelable {
     public enum Severity {
         Unknown, Low, Medium, High;
     }
-    public static class Snomed_id implements Parcelable {
+    public static class Snomed_id {
         public int id;
-        public Date from;
-        public Date to;
+        public Calendar from;
+        public Calendar to;
         public Severity severity;
 
         public Snomed_id() {
         }
 
-        protected Snomed_id(Parcel in) {
-            id = in.readInt();
-            long tmpFrom = in.readLong();
-            from = tmpFrom != -1 ? new Date(tmpFrom) : null;
-            long tmpTo = in.readLong();
-            to = tmpTo != -1 ? new Date(tmpTo) : null;
-            severity = (Severity) in.readValue(Severity.class.getClassLoader());
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(id);
-            dest.writeLong(from != null ? from.getTime() : -1L);
-            dest.writeLong(to != null ? to.getTime() : -1L);
-            dest.writeValue(severity);
-        }
-
-        @SuppressWarnings("unused")
-        public static final Parcelable.Creator<Snomed_id> CREATOR = new Parcelable.Creator<Snomed_id>() {
-            @Override
-            public Snomed_id createFromParcel(Parcel in) {
-                return new Snomed_id(in);
-            }
-
-            @Override
-            public Snomed_id[] newArray(int size) {
-                return new Snomed_id[size];
-            }
-        };
     }
     public static class Sign implements Parcelable {
         public int sign; // FIXME: placeholder

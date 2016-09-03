@@ -14,6 +14,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import se.drathier.tagbox.tagbox.Model;
+
 /**
  * Created by drathier on 2016-09-03.
  */
@@ -78,15 +80,22 @@ public class mifare_ultralight {
         return out;
     }
 
+    public void writeSerialized(Model m) throws IOException {
+        NdefFormatable n = NdefFormatable.get(mul.getTag());
+        byte[] data = serializer.serialize(m);
+        for (int i = 4; i < data.length && i < 200; i+=4) { // TODO: low limit to avoid bricking
+            byte[] b = {data[i], data[i+1], data[i+2], data[i+3]}; // FIXME: might be out of bounds
+            mul.writePage((i/4)+4, b);
+            Log.d("id: " + i, Arrays.toString(b));
+        }
+    }
+
     public void writeParcel(Parcel p) throws IOException {
         NdefFormatable n = NdefFormatable.get(mul.getTag());
         byte[] data = p.marshall();
-        for (int i = 4; i < data.length && i < 0xD0; i+=4) {
-            byte[] b = {data[i], data[i+1], data[i+2], data[i+3]};/*,
-                        data[i+4], data[i+5], data[i+6], data[i+7],
-                        data[i+8], data[i+9], data[i+10], data[i+11],
-                        data[i+12], data[i+13], data[i+14], data[i+15]}; */// FIXME: might be out of bounds
-            mul.writePage(i+4, b);
+        for (int i = 4; i < data.length && i < 888; i+=4) {
+            byte[] b = {data[i], data[i+1], data[i+2], data[i+3]}; // FIXME: might be out of bounds
+            mul.writePage((i/4)+4, b);
             Log.d("id: " + i, Arrays.toString(b));
         }
     }

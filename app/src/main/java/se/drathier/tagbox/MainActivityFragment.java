@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import se.drathier.tagbox.adapters.TagAdapter;
@@ -46,8 +47,9 @@ public class MainActivityFragment extends Fragment {
 
         Model.Snomed_id snomed_id = new Model.Snomed_id();
         snomed_id.id = 91934008;
-        snomed_id.from = new Date(1991, 6, 12);
-        snomed_id.to = new Date();
+        snomed_id.from = Calendar.getInstance();
+        snomed_id.from.set(1991, 6, 12);
+        snomed_id.to = Calendar.getInstance();
         snomed_id.severity = Model.Severity.High;
 
         model.snomed_ids = new ArrayList<>();
