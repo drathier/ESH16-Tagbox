@@ -5,7 +5,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
-import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,16 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-import se.drathier.tagbox.tagbox.Model;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+
+import se.drathier.tagbox.tagbox.Model;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
         model.snomed_ids = new ArrayList<>();
         model.snomed_ids.add(snomed_id);
+
+        //HttpRequest.get("http://google.se").body()
 
 
     }
@@ -107,12 +106,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public byte[] read_all(MifareUltralight mul) throws IOException {
+        /*
         ArrayList<Byte> out = new ArrayList<Byte>();
         int max = 0xDE;
         for (int i = 0; i < max; i+=4) {
             out.addAll(mul.readPages(i));
         }
-        mul.readPages()
+        //mul.readPages();
+        */
+        return null;
     }
 
     @Override

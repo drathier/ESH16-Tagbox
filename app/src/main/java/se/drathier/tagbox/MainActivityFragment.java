@@ -1,9 +1,12 @@
 package se.drathier.tagbox;
 
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +55,30 @@ public class MainActivityFragment extends Fragment {
         TagAdapter tagAdapter = new TagAdapter();
         tagAdapter.list = new ArrayList<>();
         tagAdapter.list.add(model);
+        tagAdapter.list.add(model);
+        tagAdapter.list.add(model);
 
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                super.onDraw(c, parent, state);
+            }
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+                int space = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getContext().getResources().getDisplayMetrics());
+
+                outRect.left = space;
+                outRect.right = space;
+                outRect.bottom = space;
+                outRect.top = space;
+            }
+        });
+
+
 
         recyclerView.setAdapter(tagAdapter);
 
