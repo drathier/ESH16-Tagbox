@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import se.drathier.tagbox.common.LocalProfile;
 import se.drathier.tagbox.tagbox.Model;
 import se.drathier.tagbox.tagbox.mifare.serializer;
 import se.drathier.tagbox.tagbox.mifare.mifare_ultralight;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment, new MainActivityFragment()).commit();
+
+        LocalProfile.load(getApplicationContext());
 
 
         Model model = new Model();
@@ -180,6 +183,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        LocalProfile.save(getApplicationContext());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

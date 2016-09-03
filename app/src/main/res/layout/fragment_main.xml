@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="se.drathier.tagbox.MainActivityFragment"
     android:background="@color/tag_background"
-    tools:showIn="@layout/activity_main"
-    >
+    tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -16,5 +16,6 @@
         tools:listitem="@layout/list_tag_info">
 
     </android.support.v7.widget.RecyclerView>
+
 
 </RelativeLayout>
