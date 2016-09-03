@@ -53,26 +53,26 @@ public class Model {
     public enum Severity {
         Unknown, Low, Medium, High;
     }
-    public class Snomed_id {
-        int id;
-        Date from;
-        Date to;
-        Severity severity;
+    public static class Snomed_id {
+        public int id;
+        public Date from;
+        public Date to;
+        public Severity severity;
     }
     public class Sign {
         int sign; // FIXME: placeholder
     }
 
-    String CountryCode;
-    String SSN;
-    BloodTypePlusMinus bt_plus;
-    BloodTypeAB bt_ab;
-    boolean is_organ_donor;
-    boolean is_male;
+    public String CountryCode;
+    public String SSN;
+    public BloodTypePlusMinus bt_plus;
+    public BloodTypeAB bt_ab;
+    public boolean is_organ_donor;
+    public boolean is_male;
 
-    List<Snomed_id> snomed_ids;
+    public List<Snomed_id> snomed_ids;
 
-    Sign sign;
+    public Sign sign;
 
 }
 
