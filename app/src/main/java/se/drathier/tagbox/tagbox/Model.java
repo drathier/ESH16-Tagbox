@@ -1,5 +1,9 @@
 package se.drathier.tagbox.tagbox;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +47,7 @@ Chip: NTAG216: 888 bytes, 7104 bits
  TODO: digital signature, bankid or similar
 
  */
-public class Model {
+public class Model implements Parcelable {
     public enum BloodTypeAB {
         Zero, A, B, AB;
     }
@@ -75,5 +79,59 @@ public class Model {
 
     public Sign sign;
 
-}
+    public Model() {
+    }
 
+    protected Model(Parcel in) {
+        CountryCode = in.readString();
+        given_name = in.readString();
+        SSN = in.readString();
+        bt_plus = (BloodTypePlusMinus) in.readValue(BloodTypePlusMinus.class.getClassLoader());
+        bt_ab = (BloodTypeAB) in.readValue(BloodTypeAB.class.getClassLoader());
+        is_organ_donor = in.readByte() != 0x00;
+        is_male = in.readByte() != 0x00;
+        if (in.readByte() == 0x01) {
+            snomed_ids = new ArrayList<Snomed_id>();
+            in.readList(snomed_ids, Snomed_id.class.getClassLoader());
+        } else {
+            snomed_ids = null;
+        }
+        sign = (Sign) in.readValue(Sign.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(CountryCode);
+        dest.writeString(given_name);
+        dest.writeString(SSN);
+        dest.writeValue(bt_plus);
+        dest.writeValue(bt_ab);
+        dest.writeByte((byte) (is_organ_donor ? 0x01 : 0x00));
+        dest.writeByte((byte) (is_male ? 0x01 : 0x00));
+        if (snomed_ids == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(snomed_ids);
+        }
+        dest.writeValue(sign);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Model> CREATOR = new Parcelable.Creator<Model>() {
+        @Override
+        public Model createFromParcel(Parcel in) {
+            return new Model(in);
+        }
+
+        @Override
+        public Model[] newArray(int size) {
+            return new Model[size];
+        }
+    };
+}
