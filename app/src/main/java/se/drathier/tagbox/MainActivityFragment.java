@@ -78,11 +78,9 @@ public class MainActivityFragment extends Fragment {
         });
 
 
-
-
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
-        int spanCount = (int) (metrics.widthPixels / (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, metrics));
+        int spanCount = (int) (metrics.widthPixels / (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, metrics));
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -106,9 +104,6 @@ public class MainActivityFragment extends Fragment {
 
 
         recyclerView.setAdapter(tagAdapter);
-
-
-
 
         return view;
     }
