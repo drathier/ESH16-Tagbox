@@ -64,6 +64,7 @@ public class Model {
     }
 
     public String CountryCode;
+    public String given_name;
     public String SSN;
     public BloodTypePlusMinus bt_plus;
     public BloodTypeAB bt_ab;
