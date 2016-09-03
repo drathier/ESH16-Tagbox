@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 a.connect();
                 ArrayList<Byte> all = mul.read_all();
-                Log.d("raw_json", gson.toJson(all));
+                //Log.d("raw_json", gson.toJson(all));
                 Model des = (new deserializer()).deserialize(all);
                 Log.d("pre_serializ_model", gson.toJson(this.m));
                 Log.d("deserialized_model", gson.toJson(des));

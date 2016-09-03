@@ -56,8 +56,9 @@ public class MainActivityFragment extends Fragment {
 
         Model.Snomed_id snomed_id2 = new Model.Snomed_id();
         snomed_id2.id = 34563004;
-        snomed_id2.from = new Date(1991, 6, 12);
-        snomed_id2.to = new Date();
+        snomed_id2.from = Calendar.getInstance();
+        snomed_id2.from.set(1991, 6, 12);
+        snomed_id2.to = Calendar.getInstance();
         snomed_id2.severity = Model.Severity.High;
 
         model.snomed_ids = new ArrayList<>();

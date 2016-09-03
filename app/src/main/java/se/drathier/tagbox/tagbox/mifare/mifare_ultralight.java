@@ -16,6 +16,8 @@ import java.util.Arrays;
 
 import se.drathier.tagbox.tagbox.Model;
 
+import static se.drathier.tagbox.MainActivity.bytesToHex;
+
 /**
  * Created by drathier on 2016-09-03.
  */
@@ -27,78 +29,40 @@ public class mifare_ultralight {
             this.mul = a;
     }
 
-    public void writeTag(Tag tag, String tagText) {
-        MifareUltralight ultralight = MifareUltralight.get(tag);
-        try {
-            ultralight.connect();
-            ultralight.writePage(4, "abcd".getBytes(Charset.forName("US-ASCII")));
-            ultralight.writePage(5, "efgh".getBytes(Charset.forName("US-ASCII")));
-            ultralight.writePage(6, "ijkl".getBytes(Charset.forName("US-ASCII")));
-            ultralight.writePage(7, "mnop".getBytes(Charset.forName("US-ASCII")));
-        } catch (IOException e) {
-            Log.e(TAG, "IOException while closing MifareUltralight...", e);
-        } finally {
-            try {
-                ultralight.close();
-            } catch (IOException e) {
-                Log.e(TAG, "IOException while closing MifareUltralight...", e);
-            }
-        }
-    }
-
-    public String readTag(Tag tag) {
-        MifareUltralight mifare = MifareUltralight.get(tag);
-        try {
-            mifare.connect();
-            byte[] payload = mifare.readPages(4);
-            return new String(payload, Charset.forName("US-ASCII"));
-        } catch (IOException e) {
-            Log.e(TAG, "IOException while writing MifareUltralight message...", e);
-        } finally {
-            if (mifare != null) {
-                try {
-                    mifare.close();
-                }
-                catch (IOException e) {
-                    Log.e(TAG, "Error closing tag...", e);
-                }
-            }
-        }
-        return null;
-    }
-
     public ArrayList<Byte> read_all() throws IOException {
         ArrayList<Byte> out = new ArrayList<Byte>();
         int max = 0xDE;
         for (int i = 4; i < max; i+=4) {
             byte[] array = mul.readPages(i);
-            out.add(array[0]);
-            out.add(array[1]);
-            out.add(array[2]);
-            out.add(array[3]);
+            for (int k = 0; k < 16; k++) {
+                out.add(array[k]);
+            }
+            Log.d("r_id: " + i, bytesToHex(array));
         }
+
+        byte[] oarr = new byte[out.size()];
+        for (int i = 0; i < out.size(); i++) {
+            oarr[i] = (byte)out.get(i);
+        }
+
+        Log.d("asd", bytesToHex(oarr));
+
         return out;
     }
 
     public void writeSerialized(Model m) throws IOException {
         NdefFormatable n = NdefFormatable.get(mul.getTag());
         byte[] data = serializer.serialize(m);
-        for (int i = 4; i < data.length && i < 200; i+=4) { // TODO: low limit to avoid bricking
+        Log.d("writeSerializedHex", bytesToHex(data));
+        for (int i = 0; i < data.length && i < 800; i+=4) { // TODO: low limit to avoid bricking
             byte[] b = {data[i], data[i+1], data[i+2], data[i+3]}; // FIXME: might be out of bounds
             mul.writePage((i/4)+4, b);
-            Log.d("id: " + i, Arrays.toString(b));
+            Log.d("w_id: " + i, bytesToHex(b));
         }
     }
 
-    public void writeParcel(Parcel p) throws IOException {
-        NdefFormatable n = NdefFormatable.get(mul.getTag());
-        byte[] data = p.marshall();
-        for (int i = 4; i < data.length && i < 888; i+=4) {
-            byte[] b = {data[i], data[i+1], data[i+2], data[i+3]}; // FIXME: might be out of bounds
-            mul.writePage((i/4)+4, b);
-            Log.d("id: " + i, Arrays.toString(b));
-        }
-    }
+    // 73653931303631322D31303939000000000000002A01057ACD38000010F7000086EE0300
+    // 04B5EBD20300FE000000000086EE030000000000000000000000000000000000000
 
     public static boolean writeTag(NdefMessage message, Tag tag) {
         int size = message.toByteArray().length;
