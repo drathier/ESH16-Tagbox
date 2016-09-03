@@ -60,6 +60,7 @@ public class Model implements Parcelable {
     }
     public static class Snomed_id {
         public int id;
+        public String response;
         public Calendar from;
         public Calendar to;
         public Severity severity;

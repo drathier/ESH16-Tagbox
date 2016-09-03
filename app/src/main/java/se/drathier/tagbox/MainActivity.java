@@ -8,6 +8,7 @@ import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +23,7 @@ import java.util.Date;
 import se.drathier.tagbox.tagbox.Model;
 import se.drathier.tagbox.tagbox.mifare.deserializer;
 import se.drathier.tagbox.tagbox.mifare.mifare_ultralight;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,13 +32,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import se.drathier.tagbox.common.SnomedDB;
 import se.drathier.tagbox.tagbox.Model;
 import se.drathier.tagbox.tagbox.mifare.serializer;
+import se.drathier.tagbox.tagbox.mifare.mifare_ultralight;
 
 public class MainActivity extends AppCompatActivity {
 
     public Model m;
+
+    public View buttonScan;
+    public View buttonProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment, new MainActivityFragment()).commit();
+
 
         Model model = new Model();
         model.CountryCode = "se";
@@ -65,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         model.snomed_ids = new ArrayList<>();
         model.snomed_ids.add(snomed_id);
 
+        buttonProfile = findViewById(R.id.button_profile);
+        buttonScan = findViewById(R.id.button_scan);
         // test serializer
         /*Gson gson = new GsonBuilder().setPrettyPrinting().create();
         byte[] data = serializer.serialize(model);
@@ -77,13 +88,30 @@ public class MainActivity extends AppCompatActivity {
 
         //HttpRequest.get("http://google.se").body()
 
-        SnomedDB.fetch("en", 91934008, new SnomedDB.SnomedResponse() {
+        buttonScan.setAlpha(1.0f);
+        buttonProfile.setAlpha(0.3f);
+
+
+        buttonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void dataFound(int id, String data) {
-                Log.d("soderstrom", id + " = " + data);
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragment, new ProfileFragment()).commit();
+                buttonScan.setAlpha(0.3f);
+                buttonProfile.setAlpha(1.0f);
+
             }
         });
 
+        buttonScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragment, new MainActivityFragment()).commit();
+                buttonScan.setAlpha(1.0f);
+                buttonProfile.setAlpha(0.3f);
+            }
+        });
 
     }
 
