@@ -5,7 +5,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import se.drathier.tagbox.R;
+import se.drathier.tagbox.common.SnomedDB;
 import se.drathier.tagbox.tagbox.Model;
 
 /**
@@ -77,6 +80,15 @@ public class TagHolder extends RecyclerView.ViewHolder {
 
         genderSymbol.setImageResource(model.is_male ? R.drawable.male : R.drawable.female);
 
+        List<Model.Snomed_id> ids = model.snomed_ids;
+
+        String t = "";
+
+        for (Model.Snomed_id id : ids) {
+            t += (t.equals("") ? SnomedDB.get(id.id) : ", " + SnomedDB.get(id.id));
+        }
+
+        terms.setText(t);
 
     }
 }

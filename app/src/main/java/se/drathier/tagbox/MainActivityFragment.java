@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import se.drathier.tagbox.adapters.TagAdapter;
+import se.drathier.tagbox.common.SnomedDB;
 import se.drathier.tagbox.tagbox.Model;
 
 /**
@@ -24,6 +25,7 @@ import se.drathier.tagbox.tagbox.Model;
 public class MainActivityFragment extends Fragment {
 
     public RecyclerView recyclerView;
+    public TagAdapter tagAdapter;
 
     public MainActivityFragment() {
     }
@@ -35,7 +37,7 @@ public class MainActivityFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.tag_list);
 
-        Model model = new Model();
+        final Model model = new Model();
         model.CountryCode = "se";
         model.SSN = "910612-1099";
         model.given_name = "Anders";
@@ -50,19 +52,37 @@ public class MainActivityFragment extends Fragment {
         snomed_id.to = new Date();
         snomed_id.severity = Model.Severity.High;
 
+        Model.Snomed_id snomed_id2 = new Model.Snomed_id();
+        snomed_id2.id = 34563004;
+        snomed_id2.from = new Date(1991, 6, 12);
+        snomed_id2.to = new Date();
+        snomed_id2.severity = Model.Severity.High;
+
         model.snomed_ids = new ArrayList<>();
         model.snomed_ids.add(snomed_id);
+        model.snomed_ids.add(snomed_id2);
 
-        TagAdapter tagAdapter = new TagAdapter();
-        tagAdapter.list = new ArrayList<>();
-        tagAdapter.list.add(model);
-        tagAdapter.list.add(model);
-        tagAdapter.list.add(model);
+
+        tagAdapter = new TagAdapter();
+
+
+        SnomedDB.fetch("en", model, new SnomedDB.SnomedModelResponse() {
+            @Override
+            public void dataAdded() {
+                tagAdapter.list = new ArrayList<>();
+                tagAdapter.list.add(model);
+                tagAdapter.list.add(model);
+                tagAdapter.list.add(model);
+                tagAdapter.notifyDataSetChanged();
+            }
+        });
+
+
 
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
-        int spanCount = (int) (metrics.widthPixels / (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180, metrics));
+        int spanCount = (int) (metrics.widthPixels / (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, metrics));
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {

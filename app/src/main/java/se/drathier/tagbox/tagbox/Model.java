@@ -59,6 +59,7 @@ public class Model implements Parcelable {
     }
     public static class Snomed_id implements Parcelable {
         public int id;
+        public String response;
         public Date from;
         public Date to;
         public Severity severity;
