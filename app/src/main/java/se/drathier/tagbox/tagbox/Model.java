@@ -57,14 +57,82 @@ public class Model implements Parcelable {
     public enum Severity {
         Unknown, Low, Medium, High;
     }
-    public static class Snomed_id {
+    public static class Snomed_id implements Parcelable {
         public int id;
         public Date from;
         public Date to;
         public Severity severity;
+
+        public Snomed_id() {
+        }
+
+        protected Snomed_id(Parcel in) {
+            id = in.readInt();
+            long tmpFrom = in.readLong();
+            from = tmpFrom != -1 ? new Date(tmpFrom) : null;
+            long tmpTo = in.readLong();
+            to = tmpTo != -1 ? new Date(tmpTo) : null;
+            severity = (Severity) in.readValue(Severity.class.getClassLoader());
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(id);
+            dest.writeLong(from != null ? from.getTime() : -1L);
+            dest.writeLong(to != null ? to.getTime() : -1L);
+            dest.writeValue(severity);
+        }
+
+        @SuppressWarnings("unused")
+        public static final Parcelable.Creator<Snomed_id> CREATOR = new Parcelable.Creator<Snomed_id>() {
+            @Override
+            public Snomed_id createFromParcel(Parcel in) {
+                return new Snomed_id(in);
+            }
+
+            @Override
+            public Snomed_id[] newArray(int size) {
+                return new Snomed_id[size];
+            }
+        };
     }
-    public class Sign {
-        int sign; // FIXME: placeholder
+    public static class Sign implements Parcelable {
+        public int sign; // FIXME: placeholder
+
+        public Sign() {
+        }
+
+        protected Sign(Parcel in) {
+            sign = in.readInt();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(sign);
+        }
+
+        @SuppressWarnings("unused")
+        public static final Parcelable.Creator<Sign> CREATOR = new Parcelable.Creator<Sign>() {
+            @Override
+            public Sign createFromParcel(Parcel in) {
+                return new Sign(in);
+            }
+
+            @Override
+            public Sign[] newArray(int size) {
+                return new Sign[size];
+            }
+        };
     }
 
     public String CountryCode;

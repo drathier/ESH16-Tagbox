@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import se.drathier.tagbox.common.SnomedDB;
 import se.drathier.tagbox.tagbox.Model;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         model.snomed_ids.add(snomed_id);
 
         //HttpRequest.get("http://google.se").body()
+
+        SnomedDB.fetch("en", 91934008, new SnomedDB.SnomedResponse() {
+            @Override
+            public void dataFound(int id, String data) {
+                Log.d("soderstrom", id + " = " + data);
+            }
+        });
 
 
     }
