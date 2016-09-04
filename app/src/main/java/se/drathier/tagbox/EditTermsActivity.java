@@ -31,6 +31,9 @@ public class EditTermsActivity extends AppCompatActivity {
     public EditText query;
     public ListView list;
     public SearchAdapter searchAdapter;
+
+    public View empty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,10 @@ public class EditTermsActivity extends AppCompatActivity {
         list = (ListView) findViewById(R.id.list);
 
         searchAdapter = new SearchAdapter(this);
+
+        empty = findViewById(R.id.empty);
+        empty.setVisibility(searchAdapter.getCount() == 0 ? View.VISIBLE : View.GONE);
+
 
         list.setAdapter(searchAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -130,6 +137,7 @@ public class EditTermsActivity extends AppCompatActivity {
 
                 searchAdapter.ids = snomed_ids;
                 searchAdapter.notifyDataSetChanged();
+                empty.setVisibility(searchAdapter.getCount() == 0 ? View.VISIBLE : View.GONE);
 
                 //list.setAdapter(new SearchAdapter(EditTermsActivity.this, snomed_ids));
 
