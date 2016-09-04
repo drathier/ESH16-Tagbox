@@ -73,6 +73,9 @@ public class deserializer {
         m.CountryCode = get_string(in, 2);
         m.SSN = get_string(in, 18);
 
+        int namelen = get_byte(in);
+        m.given_name = get_string(in, namelen);
+
         byte bits = (byte)get_byte(in);
         m.is_male = extract_bit(1, bits);
         m.is_organ_donor = extract_bit(2, bits);

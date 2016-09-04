@@ -62,6 +62,10 @@ public class serializer {
         // SSN (18 char string)
         add_string(out, 18, m.SSN);
 
+        // given name (varchar)
+        out.add((byte)m.given_name.length());
+        add_string(out, m.given_name.length(), m.given_name);
+
         // bits
         // [is_male, is_organ_donor, bloodtype_a, bloodtype_b, bloodtype_plus]
         out.add((byte) (
