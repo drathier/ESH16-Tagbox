@@ -349,5 +349,11 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@color/tag_background" />
+
     </LinearLayout>
 </ScrollView>

@@ -65,9 +65,9 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity().getApplicationContext())
                 .addApi(Nearby.MESSAGES_API)
                 .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
-                .enableAutoManage(getActivity(), this)
                 .build();
 
+        mGoogleApiClient.connect();
 
     }
 
@@ -262,6 +262,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     public void onStop() {
         unpublish();
         unsubscribe();
+        mGoogleApiClient.disconnect();
         super.onStop();
     }
 
