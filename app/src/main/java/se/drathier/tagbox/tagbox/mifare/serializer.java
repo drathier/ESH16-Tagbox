@@ -1,12 +1,6 @@
 package se.drathier.tagbox.tagbox.mifare;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.nio.ByteBuffer;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -116,6 +110,10 @@ public class serializer {
     }
 
     public static void add_string(ArrayList<Byte> out, int length, String str) {
+
+        if(str == null)
+            str = "";
+        
         for (int i = 0; i < length; i++) {
             if (i < str.length()) {
                 out.add((byte)str.charAt(i));

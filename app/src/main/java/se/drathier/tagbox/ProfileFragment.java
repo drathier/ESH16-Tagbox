@@ -27,6 +27,8 @@ public class ProfileFragment extends Fragment {
     TextView terms;
 
     public View buttonEdit;
+    public View buttonRemove;
+    public View buttonSave;
 
     public ProfileFragment() {
 
@@ -85,9 +87,10 @@ public class ProfileFragment extends Fragment {
             }
         }
 
-        if(LocalProfile.model.is_male)
+        if(LocalProfile.model.is_male) {
             male.setChecked(true);
-        else
+            female.setChecked(false);
+        } else
             female.setChecked(true);
 
         if(LocalProfile.model.is_organ_donor)
@@ -111,6 +114,55 @@ public class ProfileFragment extends Fragment {
         }
 
         buttonEdit = view.findViewById(R.id.button_add);
+        buttonRemove = view.findViewById(R.id.button_remove);
+        buttonSave = view.findViewById(R.id.button_save);
+
+        buttonRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(getContext(), RemoveTermsActivity.class), 5);
+            }
+        });
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(getContext(), WriteTagActivity.class), 5);
+            }
+        });
+
+
+        female.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    LocalProfile.model.is_male = false;
+            }
+        });
+
+        male.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    LocalProfile.model.is_male = true;
+            }
+        });
+
+        yes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    LocalProfile.model.is_organ_donor = true;
+            }
+        });
+
+        no.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    LocalProfile.model.is_organ_donor = false;
+            }
+        });
 
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override

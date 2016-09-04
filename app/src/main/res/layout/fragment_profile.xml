@@ -360,7 +360,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Save to chip"
-                android:id="@+id/textView8"
+                android:id="@+id/button_save"
                 android:layout_gravity="center_horizontal"
                 android:background="#fff"
                 android:paddingLeft="32dp"
