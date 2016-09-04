@@ -1,5 +1,6 @@
 package se.drathier.tagbox;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -8,8 +9,11 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
@@ -23,6 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -39,12 +48,13 @@ import se.drathier.tagbox.tagbox.mifare.mifare_ultralight;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
-
-
-
+public class MainActivityFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public RecyclerView recyclerView;
     public static TagAdapter tagAdapter;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Message mActiveMessage;
+    private MessageListener mMessageListener;
 
     public MainActivityFragment() {
     }
@@ -117,6 +127,28 @@ public class MainActivityFragment extends Fragment {
 
         recyclerView.setAdapter(tagAdapter);
 
+        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity().getApplicationContext())
+                .addApi(Nearby.MESSAGES_API)
+                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
+                .enableAutoManage(getActivity(), this)
+                .build();
+
+        mMessageListener = new MessageListener() {
+            @Override
+            public void onFound(Message message) {
+                String messageAsString = new String(message.getContent());
+                Log.d("Found message: ", messageAsString);
+                Toast.makeText(getActivity().getApplicationContext(), "found: " + message.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLost(Message message) {
+                String messageAsString = new String(message.getContent());
+                Log.d("Lost sight of message: ", messageAsString);
+                Toast.makeText(getActivity().getApplicationContext(), "lost: " + message.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
         return view;
     }
 
@@ -144,6 +176,28 @@ public class MainActivityFragment extends Fragment {
                 });
              */
 
+
+            unsubscribe();
+            Log.d("Delayed", "unsub");
+
+            publish("sudo scp * me");
+            Log.d("Delayed", "pub");
+
+            (new Handler()).postDelayed(new Runnable() {
+                public void run() {
+                    Log.d("Delayed", "unpub");
+                    unpublish();
+                    subscribe();
+                    Log.d("Delayed", "sub");
+                    (new Handler()).postDelayed(new Runnable() {
+                        public void run() {
+                            unsubscribe();
+                            Log.d("Delayed", "unsub");
+                        }
+                    }, 5000);
+                }
+            }, 5000);
+
             // magic sub!!
             return true;
         }
@@ -152,11 +206,54 @@ public class MainActivityFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void publish(String message) {
+        Log.i("Publishing message", message);
+        mActiveMessage = new Message(message.getBytes());
+        Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
+    }
+
+    private void unpublish() {
+        Log.i("Unpublishing", this.mActiveMessage.toString());
+        if (mActiveMessage != null) {
+            Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
+            mActiveMessage = null;
+        }
+    }
+
+    // Subscribe to receive messages.
+    private void subscribe() {
+        Log.i("Subscribing.", "");
+        Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener);
+    }
+
+    private void unsubscribe() {
+        Log.i("Unsubscribing.", "");
+        Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        publish("Hello World");
+        subscribe();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        // TODO
+    }
+
+    @Override
+    public void onStop() {
+        unpublish();
+        unsubscribe();
+        super.onStop();
     }
 
     @Override
@@ -244,5 +341,10 @@ public class MainActivityFragment extends Fragment {
 
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // TODO
     }
 }
