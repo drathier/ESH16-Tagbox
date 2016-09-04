@@ -1,11 +1,13 @@
 package se.drathier.tagbox.adapters;
 
+import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import se.drathier.tagbox.R;
 import se.drathier.tagbox.common.SnomedDB;
@@ -24,6 +26,8 @@ public class TagHolder extends RecyclerView.ViewHolder {
 
     ImageView genderSymbol;
 
+    TextToSpeech speech;
+
     public TagHolder(View itemView) {
         super(itemView);
 
@@ -35,6 +39,25 @@ public class TagHolder extends RecyclerView.ViewHolder {
 
         genderSymbol = (ImageView) itemView.findViewById(R.id.gender_image);
 
+        speech = new TextToSpeech(itemView.getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    speech.setLanguage(Locale.US);
+                }
+            }
+        });
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String sp = "Given name: " + givenName.getText().toString() + ". Social security number: " + ssn.getText().toString() + ".  Known terms: " + terms.getText().toString();
+
+                speech.speak(sp, TextToSpeech.QUEUE_FLUSH, null);
+
+            }
+        });
     }
 
     public void bindData(Model model) {
@@ -87,6 +110,8 @@ public class TagHolder extends RecyclerView.ViewHolder {
         for (Model.Snomed_id id : ids) {
             t += (t.equals("") ? "\u2022  " + SnomedDB.get(id.id) : "\n\n\u2022  " + SnomedDB.get(id.id));
         }
+
+        t = t.replace("(finding)", "").replace("(disorder)", "");
 
         terms.setText(t);
 

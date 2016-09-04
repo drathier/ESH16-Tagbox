@@ -162,6 +162,8 @@ public class MainActivityFragment extends Fragment {
             tagAdapter.notifyDataSetChanged();
             empty.setVisibility(View.VISIBLE);
 
+        } else if(item.getItemId() == R.id.action_lang) {
+            startActivity(new Intent(getContext(), Activityang.class));
         }
 
 

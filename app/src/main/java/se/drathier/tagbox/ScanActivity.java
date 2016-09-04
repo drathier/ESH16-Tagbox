@@ -142,7 +142,7 @@ public class ScanActivity extends AppCompatActivity {
 
 
 
-        SnomedDB.fetch("se", model, new SnomedDB.SnomedModelResponse() {
+        SnomedDB.fetch("en", model, new SnomedDB.SnomedModelResponse() {
             @Override
             public void dataAdded() {
                 tagAdapter.list.add(model);
@@ -152,7 +152,7 @@ public class ScanActivity extends AppCompatActivity {
             }
         });
 
-        SnomedDB.fetch("se", model2, new SnomedDB.SnomedModelResponse() {
+        SnomedDB.fetch("en", model2, new SnomedDB.SnomedModelResponse() {
             @Override
             public void dataAdded() {
                 tagAdapter.list.add(model2);

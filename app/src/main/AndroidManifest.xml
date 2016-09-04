@@ -56,8 +56,11 @@
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
-        <activity android:name=".ScanActivity"
-            android:label="Scan nearby"></activity>
+        <activity
+            android:name=".ScanActivity"
+            android:label="Scan nearby" />
+        <activity android:name=".Activityang"
+            android:label="Select your language:"></activity>
     </application>
 
 </manifest>

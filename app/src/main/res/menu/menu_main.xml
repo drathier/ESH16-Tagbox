@@ -14,4 +14,10 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_action_delete"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_lang"
+        android:orderInCategory="110"
+        android:icon="@drawable/ic_action_action_language"
+        app:showAsAction="always" />
 </menu>
