@@ -61,9 +61,6 @@ public class mifare_ultralight {
         }
     }
 
-    // 73653931303631322D31303939000000000000002A01057ACD38000010F7000086EE0300
-    // 04B5EBD20300FE000000000086EE030000000000000000000000000000000000000
-
     public static boolean writeTag(NdefMessage message, Tag tag) {
         int size = message.toByteArray().length;
         try {
