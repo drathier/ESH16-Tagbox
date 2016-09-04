@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="se.drathier.tagbox.MainActivityFragment"
-    android:background="@color/tag_background"
-    tools:showIn="@layout/activity_main">
+    android:background="@color/tag_background">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -16,6 +15,35 @@
         tools:listitem="@layout/list_tag_info">
 
     </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tag_background"
+        android:id="@+id/empty">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView5"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_device_nfc"
+            android:tint="#ddd"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Waiting for the tag.."
+            android:id="@+id/textView11"
+            android:textSize="14sp"
+            android:textColor="#ccc"
+            android:layout_below="@+id/imageView5"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 
 </RelativeLayout>

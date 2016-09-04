@@ -51,6 +51,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     public RecyclerView recyclerView;
     public static TagAdapter tagAdapter;
 
+    public View empty;
+
     private GoogleApiClient mGoogleApiClient;
     private Message mActiveMessage;
     private MessageListener mMessageListener;
@@ -77,6 +79,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.tag_list);
+        empty = view.findViewById(R.id.empty);
 
         final Model model = new Model();
         model.CountryCode = "se";
@@ -139,6 +142,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
 
         recyclerView.setAdapter(tagAdapter);
+
+        empty.setVisibility(tagAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
 
         mMessageListener = new MessageListener() {
             @Override
@@ -336,6 +341,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
                         tagAdapter.list.add(des);
                         tagAdapter.notifyDataSetChanged();
+                        empty.setVisibility(tagAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+
                     }
                 });
 
