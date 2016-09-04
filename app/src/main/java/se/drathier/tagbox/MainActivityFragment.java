@@ -1,6 +1,5 @@
 package se.drathier.tagbox;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -12,8 +11,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
@@ -57,6 +56,19 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private MessageListener mMessageListener;
 
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity().getApplicationContext())
+                .addApi(Nearby.MESSAGES_API)
+                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
+                .enableAutoManage(getActivity(), this)
+                .build();
+
+
     }
 
     @Override
@@ -125,13 +137,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
         setHasOptionsMenu(true);
 
-        recyclerView.setAdapter(tagAdapter);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity().getApplicationContext())
-                .addApi(Nearby.MESSAGES_API)
-                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
-                .enableAutoManage(getActivity(), this)
-                .build();
+        recyclerView.setAdapter(tagAdapter);
 
         mMessageListener = new MessageListener() {
             @Override
@@ -213,7 +220,9 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     }
 
     private void unpublish() {
-        Log.i("Unpublishing", this.mActiveMessage.toString());
+        if(mActiveMessage != null)
+            Log.i("Unpublishing", this.mActiveMessage.toString());
+
         if (mActiveMessage != null) {
             Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
             mActiveMessage = null;

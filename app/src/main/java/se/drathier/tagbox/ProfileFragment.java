@@ -115,7 +115,7 @@ public class ProfileFragment extends Fragment {
 
         buttonEdit = view.findViewById(R.id.button_add);
         buttonRemove = view.findViewById(R.id.button_remove);
-        buttonSave = view.findViewById(R.id.button_save);
+
 
         buttonRemove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,12 +124,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(getContext(), WriteTagActivity.class), 5);
-            }
-        });
 
 
         female.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
