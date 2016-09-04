@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
 Chip: NTAG216: 888 bytes, 7104 bits
@@ -59,7 +58,6 @@ public class Model implements Parcelable {
     }
     public static class Snomed_id {
         public int id;
-        public String webId;
         public String response;
         public Calendar from;
         public Calendar to;
@@ -108,10 +106,10 @@ public class Model implements Parcelable {
     public String SSN;
     public BloodTypePlusMinus bt_plus;
     public BloodTypeAB bt_ab;
-    public boolean is_organ_donor;
-    public boolean is_male;
+    public Boolean is_organ_donor;
+    public Boolean is_male;
 
-    public List<Snomed_id> snomed_ids;
+    public ArrayList<Snomed_id> snomed_ids;
 
     public Sign sign;
 
