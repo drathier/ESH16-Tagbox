@@ -16,8 +16,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -109,10 +113,50 @@ public class MainActivityFragment extends Fragment {
         });
 
 
+        setHasOptionsMenu(true);
 
         recyclerView.setAdapter(tagAdapter);
 
         return view;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        if(item.getItemId() == R.id.action_scan) {
+            Toast.makeText(MainActivityFragment.this.getContext(), "SCAN!", Toast.LENGTH_SHORT).show();
+
+            /*
+            final Model des = (new deserializer()).deserialize(all);
+
+                SnomedDB.fetch("en", des, new SnomedDB.SnomedModelResponse() {
+                    @Override
+                    public void dataAdded() {
+
+                        if(tagAdapter.list == null)
+                            tagAdapter.list = new ArrayList<>();
+
+                        tagAdapter.list.add(des);
+                        tagAdapter.notifyDataSetChanged();
+                    }
+                });
+             */
+
+            // magic sub!!
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

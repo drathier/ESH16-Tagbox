@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">TAGBOX</string>
     <string name="action_settings">Settings</string>
+    <string name="action_scan">Scan</string>
+
     <string name="no_data">No data</string>
 </resources>
