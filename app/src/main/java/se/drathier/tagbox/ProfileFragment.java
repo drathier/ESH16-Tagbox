@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import se.drathier.tagbox.common.LocalProfile;
 import se.drathier.tagbox.tagbox.Model;
@@ -23,6 +24,7 @@ public class ProfileFragment extends Fragment {
 
     RadioButton zero, a, b, ab, plus, minus, female, male, yes, no;
     EditText name, ssn;
+    TextView terms;
 
     public View buttonEdit;
 
@@ -38,6 +40,7 @@ public class ProfileFragment extends Fragment {
 
         name = (EditText) view.findViewById(R.id.name);
         ssn = (EditText) view.findViewById(R.id.ssn);
+        terms = (TextView) view.findViewById(R.id.terms_data);
 
         zero = (RadioButton) view.findViewById(R.id.bt_zero);
         a = (RadioButton) view.findViewById(R.id.bt_a);
@@ -93,12 +96,26 @@ public class ProfileFragment extends Fragment {
             no.setChecked(true);
 
 
-        buttonEdit = view.findViewById(R.id.button_edit_terms);
+        if(LocalProfile.model.snomed_ids != null) {
+
+            String t = "";
+            for (Model.Snomed_id snomed_id : LocalProfile.model.snomed_ids) {
+
+                t += snomed_id.response + "\n\n";
+            }
+
+            if(t.equals(""))
+                t = "No data";
+
+            terms.setText(t);
+        }
+
+        buttonEdit = view.findViewById(R.id.button_add);
 
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), EditTermsActivity.class));
+                startActivityForResult(new Intent(getContext(), EditTermsActivity.class), 5);
             }
         });
 
@@ -194,5 +211,25 @@ public class ProfileFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(LocalProfile.model.snomed_ids != null) {
+
+            String t = "";
+            for (Model.Snomed_id snomed_id : LocalProfile.model.snomed_ids) {
+
+                t += snomed_id.response + "\n\n";
+            }
+
+            if(t.equals(""))
+                t = "No data";
+
+            terms.setText(t);
+        }
+
     }
 }

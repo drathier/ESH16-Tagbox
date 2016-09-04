@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +59,7 @@ public class Model implements Parcelable {
     }
     public static class Snomed_id {
         public int id;
+        public String webId;
         public String response;
         public Calendar from;
         public Calendar to;

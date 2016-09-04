@@ -294,28 +294,58 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="No data"
-                android:id="@+id/textView11"
+                android:id="@+id/terms_data"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
                 android:textColor="#555"
                 android:textSize="14sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Edit terms"
-                android:id="@+id/button_edit_terms"
-                android:layout_gravity="center_horizontal"
-                android:background="#fff"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:layout_centerInParent="true"
-                android:textSize="16sp"
-                android:textColor="@color/colorPrimary"
-                android:gravity="center_vertical|center_horizontal" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Add"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/button_add"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#fff"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:layout_centerInParent="true"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Remove "
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/button_remove"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#fff"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:layout_centerInParent="true"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -337,6 +367,8 @@
                 android:paddingRight="32dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
                 android:layout_centerInParent="true"
                 android:textSize="16sp"
                 android:textColor="@color/colorPrimary"
