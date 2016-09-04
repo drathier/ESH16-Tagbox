@@ -7,6 +7,7 @@ import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 
@@ -15,10 +16,16 @@ import se.drathier.tagbox.tagbox.mifare.mifare_ultralight;
 
 public class WriteTagActivity extends AppCompatActivity {
 
+    public View done;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_tag);
+
+        overridePendingTransition(0, 0);
+
+        done = findViewById(R.id.done);
     }
 
     @Override
@@ -41,6 +48,8 @@ public class WriteTagActivity extends AppCompatActivity {
             try {
                 mul.mul.connect();
                 mul.writeSerialized(LocalProfile.model);
+                done.setVisibility(View.VISIBLE);
+
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -73,6 +82,7 @@ public class WriteTagActivity extends AppCompatActivity {
             try {
                 mul.mul.connect();
                 mul.writeSerialized(LocalProfile.model);
+                done.setVisibility(View.VISIBLE);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

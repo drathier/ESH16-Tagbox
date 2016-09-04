@@ -196,12 +196,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                     unpublish();
                     subscribe();
                     Log.d("Delayed", "sub");
-                    (new Handler()).postDelayed(new Runnable() {
-                        public void run() {
-                            unsubscribe();
-                            Log.d("Delayed", "unsub");
-                        }
-                    }, 5000);
+
                 }
             }, 5000);
 
@@ -232,12 +227,21 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     // Subscribe to receive messages.
     private void subscribe() {
         Log.i("Subscribing.", "");
-        Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener);
+        try {
+            Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener);
+        } catch (Exception e) {
+
+        }
     }
 
     private void unsubscribe() {
         Log.i("Unsubscribing.", "");
-        Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
+
+        try {
+            Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -263,6 +267,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         unpublish();
         unsubscribe();
         mGoogleApiClient.disconnect();
+
         super.onStop();
     }
 
