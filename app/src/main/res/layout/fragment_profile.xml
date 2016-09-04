@@ -29,10 +29,11 @@
             android:id="@+id/ssn"
             android:background="#00ffffff"
             android:hint="Ex. 900213-2342"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textColor="#555"
             android:textColorHint="#ccc"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textIsSelectable="false" />
 
         <TextView
             android:layout_width="match_parent"
@@ -53,7 +54,7 @@
             android:id="@+id/name"
             android:background="#00ffffff"
             android:hint="Ex. Filip"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textColor="#555"
             android:textColorHint="#ccc"
             android:padding="12dp" />
@@ -295,20 +296,20 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="No data"
                 android:id="@+id/terms_data"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:textColor="#555"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:layout_weight="1">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Add"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -328,7 +329,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Remove "
                     android:foreground="?android:attr/selectableItemBackground"

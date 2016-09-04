@@ -26,7 +26,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView5"
+            android:id="@+id/tag"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_device_nfc"
@@ -39,10 +39,11 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Waiting for the tag.."
             android:id="@+id/textView11"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="#ccc"
-            android:layout_below="@+id/imageView5"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp" />
     </RelativeLayout>
 
 

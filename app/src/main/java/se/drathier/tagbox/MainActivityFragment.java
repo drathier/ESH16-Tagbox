@@ -1,5 +1,7 @@
 package se.drathier.tagbox;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -8,9 +10,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -24,13 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -47,15 +41,12 @@ import se.drathier.tagbox.tagbox.mifare.mifare_ultralight;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivityFragment extends Fragment {
     public RecyclerView recyclerView;
     public static TagAdapter tagAdapter;
 
     public View empty;
-
-    private GoogleApiClient mGoogleApiClient;
-    private Message mActiveMessage;
-    private MessageListener mMessageListener;
+    public View tag;
 
     public MainActivityFragment() {
     }
@@ -64,12 +55,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity().getApplicationContext())
-                .addApi(Nearby.MESSAGES_API)
-                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
-                .build();
 
-        mGoogleApiClient.connect();
 
     }
 
@@ -114,6 +100,18 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             tagAdapter.list = new ArrayList<>();
         }
 
+        tag = view.findViewById(R.id.tag);
+
+        ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(tag,
+                PropertyValuesHolder.ofFloat("scaleX", 1.2f),
+                PropertyValuesHolder.ofFloat("scaleY", 1.2f));
+        scaleDown.setDuration(500);
+
+        scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
+
+        scaleDown.start();
+
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
         int spanCount = (int) (metrics.widthPixels / (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, metrics));
@@ -145,21 +143,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
         empty.setVisibility(tagAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
 
-        mMessageListener = new MessageListener() {
-            @Override
-            public void onFound(Message message) {
-                String messageAsString = new String(message.getContent());
-                Log.d("Found message: ", messageAsString);
-                Toast.makeText(getActivity().getApplicationContext(), "found: " + message.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onLost(Message message) {
-                String messageAsString = new String(message.getContent());
-                Log.d("Lost sight of message: ", messageAsString);
-                Toast.makeText(getActivity().getApplicationContext(), "lost: " + message.toString(), Toast.LENGTH_SHORT).show();
-            }
-        };
 
         return view;
     }
@@ -170,84 +153,22 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
 
         if(item.getItemId() == R.id.action_scan) {
-            Toast.makeText(MainActivityFragment.this.getContext(), "SCAN!", Toast.LENGTH_SHORT).show();
 
-            /*
-            final Model des = (new deserializer()).deserialize(all);
-
-                SnomedDB.fetch("en", des, new SnomedDB.SnomedModelResponse() {
-                    @Override
-                    public void dataAdded() {
-
-                        if(tagAdapter.list == null)
-                            tagAdapter.list = new ArrayList<>();
-
-                        tagAdapter.list.add(des);
-                        tagAdapter.notifyDataSetChanged();
-                    }
-                });
-             */
-
-
-            unsubscribe();
-            Log.d("Delayed", "unsub");
-
-            publish("sudo scp * me");
-            Log.d("Delayed", "pub");
-
-            (new Handler()).postDelayed(new Runnable() {
-                public void run() {
-                    Log.d("Delayed", "unpub");
-                    unpublish();
-                    subscribe();
-                    Log.d("Delayed", "sub");
-
-                }
-            }, 5000);
-
+            startActivity(new Intent(getContext(), ScanActivity.class));
             // magic sub!!
             return true;
+        } else if(item.getItemId() == R.id.action_remove) {
+            tagAdapter.list.clear();
+            tagAdapter.notifyDataSetChanged();
+            empty.setVisibility(View.VISIBLE);
+
         }
 
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void publish(String message) {
-        Log.i("Publishing message", message);
-        mActiveMessage = new Message(message.getBytes());
-        Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
-    }
 
-    private void unpublish() {
-        if(mActiveMessage != null)
-            Log.i("Unpublishing", this.mActiveMessage.toString());
-
-        if (mActiveMessage != null) {
-            Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
-            mActiveMessage = null;
-        }
-    }
-
-    // Subscribe to receive messages.
-    private void subscribe() {
-        Log.i("Subscribing.", "");
-        try {
-            Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener);
-        } catch (Exception e) {
-
-        }
-    }
-
-    private void unsubscribe() {
-        Log.i("Unsubscribing.", "");
-
-        try {
-            Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
-        } catch (Exception e) {
-
-        }
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -257,21 +178,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        publish("Hello World");
-        subscribe();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        // TODO
-    }
-
-    @Override
     public void onStop() {
-        unpublish();
-        unsubscribe();
-        mGoogleApiClient.disconnect();
 
         super.onStop();
     }
@@ -365,8 +272,5 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // TODO
-    }
+
 }

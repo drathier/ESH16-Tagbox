@@ -4,8 +4,14 @@
     tools:context="se.drathier.tagbox.MainActivity">
     <item
         android:id="@+id/action_scan"
-        android:orderInCategory="100"
+        android:orderInCategory="105"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_action_action_track_changes"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_remove"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_action_delete"
         app:showAsAction="always" />
 </menu>

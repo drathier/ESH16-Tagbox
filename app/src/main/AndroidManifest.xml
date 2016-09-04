@@ -45,7 +45,8 @@
         </activity>
         <activity android:name=".EditTermsActivity" />
         <activity android:name=".RemoveTermsActivity" />
-        <activity android:name=".WriteTagActivity"
+        <activity
+            android:name=".WriteTagActivity"
             android:label="Write tag">
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
@@ -55,6 +56,8 @@
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
+        <activity android:name=".ScanActivity"
+            android:label="Scan nearby"></activity>
     </application>
 
 </manifest>

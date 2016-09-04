@@ -87,16 +87,21 @@ public class ProfileFragment extends Fragment {
             }
         }
 
-        if(LocalProfile.model.is_male) {
-            male.setChecked(true);
-            female.setChecked(false);
-        } else
-            female.setChecked(true);
+        if(LocalProfile.model.is_male != null) {
 
-        if(LocalProfile.model.is_organ_donor)
-            yes.setChecked(true);
-        else
-            no.setChecked(true);
+            if (LocalProfile.model.is_male) {
+                male.setChecked(true);
+                female.setChecked(false);
+            } else
+                female.setChecked(true);
+        }
+
+        if(LocalProfile.model.is_organ_donor != null) {
+            if (LocalProfile.model.is_organ_donor)
+                yes.setChecked(true);
+            else
+                no.setChecked(true);
+        }
 
 
         if(LocalProfile.model.snomed_ids != null) {
@@ -104,7 +109,10 @@ public class ProfileFragment extends Fragment {
             String t = "";
             for (Model.Snomed_id snomed_id : LocalProfile.model.snomed_ids) {
 
-                t += snomed_id.response + "\n\n";
+                if(t.equals(""))
+                    t += "•  " + snomed_id.response;
+                else
+                    t += "\n\n•  " + snomed_id.response;
             }
 
             if(t.equals(""))
@@ -268,7 +276,10 @@ public class ProfileFragment extends Fragment {
             String t = "";
             for (Model.Snomed_id snomed_id : LocalProfile.model.snomed_ids) {
 
-                t += snomed_id.response + "\n\n";
+                if(t.equals(""))
+                    t += "•  " + snomed_id.response;
+                else
+                    t += "\n\n•  " + snomed_id.response;
             }
 
             if(t.equals(""))

@@ -85,7 +85,7 @@ public class TagHolder extends RecyclerView.ViewHolder {
         String t = "";
 
         for (Model.Snomed_id id : ids) {
-            t += (t.equals("") ? SnomedDB.get(id.id) : ", " + SnomedDB.get(id.id));
+            t += (t.equals("") ? "\u2022  " + SnomedDB.get(id.id) : "\n\n\u2022  " + SnomedDB.get(id.id));
         }
 
         terms.setText(t);
