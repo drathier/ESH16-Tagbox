@@ -25,7 +25,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagHolder> {
 
     @Override
     public void onBindViewHolder(TagHolder holder, int position) {
-        Model model = list.get(position);
+        Model model = list.get(getItemCount() - position - 1);
         holder.bindData(model);
     }
 
